@@ -1,0 +1,82 @@
+openapi: 3.1.0
+info:
+  title: OpenAPI definition
+  version: v0
+servers:
+- url: http://localhost:8080
+  description: Generated server url
+tags:
+- name: Personas
+  description: Endpoints para gestión de personas
+paths:
+  /api/personas:
+    post:
+      tags:
+      - Personas
+      summary: Crear una persona
+      description: Registra una nueva persona en el sistema
+      operationId: crearPersona
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PersonarRequest"
+        required: true
+      responses:
+        "201":
+          description: Persona creada exitosamente
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/Persona"
+        "400":
+          description: Datos inválidos
+        "409":
+          description: La persona ya existe
+  /api/personas/{numeroIdentificacion}:
+    get:
+      tags:
+      - Personas
+      summary: Consultar una persona
+      description: Busca una persona por número de identificación
+      operationId: consultarPersona
+      parameters:
+      - name: numeroIdentificacion
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        "200":
+          description: Persona encontrada
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/Persona"
+        "404":
+          description: Persona no encontrada
+components:
+  schemas:
+    PersonarRequest:
+      type: object
+      properties:
+        numeroIdentificacion:
+          type: string
+          minLength: 1
+        nombre:
+          type: string
+          minLength: 1
+        email:
+          type: string
+          minLength: 1
+    Persona:
+      type: object
+      properties:
+        numeroIdentificacion:
+          type: string
+        nombre:
+          type: string
+          minLength: 1
+        email:
+          type: string
+          minLength: 1
